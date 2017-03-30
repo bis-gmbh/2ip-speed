@@ -1,3 +1,3 @@
 [servers]
-Server-NL ansible_ssh_host=188.166.79.149 ansible_ssh_user=root node_host=nl.a2ip.ru
+Server-Local-Net ansible_ssh_host=1.2.3.4 ansible_ssh_user=root node_host=sp.2ip.ru
 

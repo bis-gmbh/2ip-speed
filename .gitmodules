@@ -1,6 +1,3 @@
-[submodule "playbook/ansible-letsencrypt"]
-	path = playbook/ansible-letsencrypt
-	url = git://github.com/bis-gmbh/ansible-letsencrypt.git
 [submodule "playbooks/ansible-letsencrypt"]
 	path = playbooks/ansible-letsencrypt
 	url = git://github.com/bis-gmbh/ansible-letsencrypt.git
