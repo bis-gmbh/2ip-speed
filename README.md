@@ -6,7 +6,6 @@
 
 ```git clone https://github.com/bis-gmbh/2ip-speed-server.git```  
 ```cd 2ip-speed-server && git submodule update --init```
-``````
 
 2) Change playbooks/hosts variables:
     - ansible_ssh_host
