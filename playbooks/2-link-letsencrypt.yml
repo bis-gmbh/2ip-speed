@@ -1,13 +1,6 @@
 ---
-- name: Get certificate and install autorenew cron
+- name: Link letsencrypt certificate
   hosts: servers
-  user: root
-  roles:
-    - role: ansible-letsencrypt
-      letsencrypt_email: admin@{{ node_host }}
-      letsencrypt_authenticator: standalone
-      letsencrypt_cert_domains:
-       - '{{ node_host }}'
   tasks:
     - name: make 2ip dir
       file: path=/etc/2ip state=directory

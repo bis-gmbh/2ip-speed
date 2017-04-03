@@ -1,0 +1,11 @@
+---
+- name: Get certificate and install autorenew cron
+  hosts: servers
+  user: root
+  roles:
+    - role: ansible-letsencrypt
+      letsencrypt_email: admin@{{ node_host }}
+      letsencrypt_authenticator: standalone
+      letsencrypt_cert_domains:
+       - '{{ node_host }}'
+

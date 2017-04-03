@@ -11,7 +11,7 @@
     - ansible_ssh_host
     - node_host
 
-3) Make letsencrypt certificates and crontab updates:
+3) Make letsencrypt certificates and crontab updates (skip if exist):
 
 ```ansible-playbook -i playbooks/hosts playbooks/1-get-letsencrypt.yml```
 
