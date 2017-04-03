@@ -1,4 +1,6 @@
-## 2ip ansible platform installation on new server
+## 2ip platform installation
+
+### Ansible 
 
 1) Clone repositories
 
