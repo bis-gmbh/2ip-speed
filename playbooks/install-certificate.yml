@@ -1,0 +1,22 @@
+---
+- name: Get certificate and install autorenew cron
+  hosts: servers
+  user: root
+  roles:
+    - role: ansible-letsencrypt
+      letsencrypt_email: admin@{{ node_host }}
+      letsencrypt_authenticator: standalone
+      letsencrypt_cert_domains:
+       - '{{ node_host }}'
+  tasks:
+    - name: make 2ip dir
+      file: path=/etc/2ip state=directory
+
+    - name: symlink for 2ip dir
+      file:
+        src: /etc/letsencrypt/live/{{ node_host }}/{{ item.path }}
+        dest: /etc/2ip/{{ item.dest }}
+        state: link
+      with_items:
+        - { path: 'cert.pem', dest: 'cert.pem' }
+        - { path: 'privkey.pem', dest: 'key.pem' }

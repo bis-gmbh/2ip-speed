@@ -1,0 +1,23 @@
+---
+- name: Install packages
+  hosts: servers
+  tasks:
+    - name: Install binaries
+      unarchive:
+        src: "https://github.com/bis-gmbh/2ip-speed-server/releases/download/latest/speedtest-{{ansible_architecture}}.tar.gz"
+        dest: "/usr/bin/"
+        copy: no
+
+    - name: Install service template
+      copy:
+        src: templates/2ip-speed.service
+        dest: /etc/systemd/system/2ip-speed.service
+      notify:
+        - reload systemctl
+
+    - name: Start platform
+      service: name=2ip-speed.service state=started enabled=yes
+
+  handlers:
+    - name: reload systemctl
+      command: systemctl daemon-reload
