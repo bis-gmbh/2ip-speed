@@ -2,7 +2,7 @@
 
 1) Clone repositories
 
-```git clone https://github.com/bis-gmbh/2ip-speed-server.git```
+```git clone https://github.com/bis-gmbh/2ip-speed-server.git```  
 ```git submodule update --init```
 
 2) Change playbooks/hosts variables:
