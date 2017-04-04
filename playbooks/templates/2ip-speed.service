@@ -6,6 +6,10 @@ After=network.target
 Type=simple
 ExecStart=/usr/bin/speedtest
 ExecReload=/bin/kill -HUP $MAINPID
+User=nobody
+Group=nogroup
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
