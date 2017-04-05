@@ -11,5 +11,5 @@
         dest: /etc/2ip/{{ item.dest }}
         state: link
       with_items:
-        - { path: 'cert.pem', dest: 'cert.pem' }
+        - { path: 'fullchain.pem', dest: 'cert.pem' }
         - { path: 'privkey.pem', dest: 'key.pem' }
