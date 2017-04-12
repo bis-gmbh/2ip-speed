@@ -5,6 +5,16 @@
     - name: make 2ip dir
       file: path=/etc/2ip state=directory
 
+    - name: chmod for /etc/letsencrypt/archive/
+      file:
+        path: /etc/letsencrypt/archive/
+        mode: 0755
+
+    - name: chmod for /etc/letsencrypt/live/
+      file:
+        path: /etc/letsencrypt/live/
+        mode: 0755
+
     - name: symlink for 2ip dir
       file:
         src: /etc/letsencrypt/live/{{ node_host }}/{{ item.path }}
