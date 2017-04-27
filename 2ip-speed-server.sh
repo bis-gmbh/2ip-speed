@@ -31,7 +31,7 @@ get_certificates() {
 post_install() {
     case $(uname) in
     Linux)
-        if [ $(pidof systemd) = "1" ]; then
+        if [ -d "/etc/systemd/" ]; then
             SYSTEMD_CONFIG="[Unit]
 Description=2ip speed
 After=network.target
@@ -56,11 +56,9 @@ WantedBy=multi-user.target
                     echo "$SYSTEMD_CONFIG" > "/etc/systemd/system/2ip-speed.service" || \
                     sudo sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
 
-                echo "-------------------------------------------"
-                echo " 3. For run service please type commands: "
-                echo "-------------------------------------------"
-                echo "sudo systemctl daemon-reload"
-                echo "sudo systemctl start 2ip-speed.service"
+                sudo systemctl daemon-reload
+                sudo systemctl start 2ip-speed.service
+                sudo systemctl status 2ip-speed.service
             fi
 
             return;
