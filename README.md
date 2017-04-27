@@ -1,6 +1,21 @@
 ## 2ip platform installation
 
-### Ansible 
+### Manual
+
+Linux dependencies:
+
+```
+apt-get update
+apt-get install sudo systemd
+```
+
+```
+curl -O "https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/2ip-speed-server.sh"
+chmod +x 2ip-speed-server.sh
+./2ip-speed-server.sh install
+```
+
+### Ansible (better for multiple hosts)
 
 1) Clone repositories
 
