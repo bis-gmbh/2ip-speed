@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
@@ -13,19 +13,25 @@ get_certificates() {
     done ;
 
     echo "-------------------------------------------"
-    echo " 1. Letsencrypt certbot downloading "
+    echo " 1. Letsencrypt certificate installation "
     echo "-------------------------------------------"
 
-    curl -O "https://dl.eff.org/certbot-auto"
-    chmod a+x certbot-auto
+    curl -o $INSTALL_PATH/certbot-auto "https://dl.eff.org/certbot-auto"
+    chmod a+x $INSTALL_PATH/certbot-auto
+
+    $INSTALL_PATH/certbot-auto certonly --non-interactive --standalone --email dev@2ip.ru --agree-tos -d $DOMAIN
 
     echo "-------------------------------------------"
-    echo " 1.1. Letsencrypt certificate installation "
+    echo " 1.1. Crontab autorenew "
     echo "-------------------------------------------"
-    ./certbot-auto certonly --non-interactive --standalone --email dev@2ip.ru --agree-tos -d $DOMAIN
 
-    sudo chmod -R 755 /etc/letsencrypt/live/
-    sudo chmod -R 755 /etc/letsencrypt/archive/
+    CMD="$INSTALL_PATH/certbot-auto renew --renew-hook \"systemctl restart 2ip-speed\" > /dev/null 2>&1"
+    JOB="0 12 * * * $CMD"
+
+    ( crontab -l | grep -v -F "$CMD" ; echo "$JOB" ) | crontab -
+
+    chmod -R 755 /etc/letsencrypt/live/
+    chmod -R 755 /etc/letsencrypt/archive/
 }
 
 post_install() {
@@ -41,7 +47,6 @@ Type=simple
 ExecStart=$INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
-Group=nogroup
 Restart=always
 RestartSec=3
 
@@ -54,15 +59,23 @@ WantedBy=multi-user.target
             if [ $INSTALL_SYSTEMD = "y" ] || [ $INSTALL_SYSTEMD = "Y" ]; then
                 [ -w /etc/systemd/system/ ] && \
                     echo "$SYSTEMD_CONFIG" > "/etc/systemd/system/2ip-speed.service" || \
-                    sudo sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
+                    sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
 
-                sudo systemctl daemon-reload
-                sudo systemctl start 2ip-speed.service
-                sudo systemctl status 2ip-speed.service
+                systemctl daemon-reload
+                systemctl start 2ip-speed.service
+                systemctl status 2ip-speed.service
             fi
-
-            return;
+        else
+            echo "For run please run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN".
         fi
+
+        echo "-------------------------------------------"
+        echo " 3. Go to isp control panel for add: "
+        echo "-------------------------------------------"
+        echo " wss://$DOMAIN:8001/ws "
+        echo " "
+
+        return;
         ;;
     *)
     esac
@@ -75,29 +88,26 @@ get_bin() {
 
     curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/latest/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
-    if [ -w "$INSTALL_PATH" ]; then
-        mkdir -p $INSTALL_PATH
-        mv speedtest "$INSTALL_PATH"
-    else
-        sudo mkdir -p "$INSTALL_PATH"
-        sudo mv speedtest "$INSTALL_PATH"
-    fi
+    mkdir -p "$INSTALL_PATH"
+    mv speedtest "$INSTALL_PATH"
 
     post_install
 }
 
 install() {
-    get_certificates
-    get_bin
+    if [ "$(id -u)" != "0" ]; then
+       echo "This script must be run as root" 1>&2
+       exit 1
+    else
+        get_certificates
+        get_bin
+    fi
 }
 
 select_os() {
     echo "Please select server operation system [default: linux x86_64]:"
     echo "1) Linux x86_64"
     echo "2) Linux x86_32"
-    echo "3) FreeBSD x86_64"
-    echo "4) FreeBSD x86_32"
-    echo "5) Darwin (macOS) x86_64)"
 
     read -r -p "Select platform [1-5]: " NUMBER;
     case $NUMBER in
@@ -105,12 +115,6 @@ select_os() {
            MACHINE_TYPE='x86_64';;
         2) OS='linux';
            MACHINE_TYPE='x86_32';;
-        3) OS='freebsd';
-           MACHINE_TYPE='x86_64';;
-        4) OS='freebsd';
-           MACHINE_TYPE='x86_32';;
-        5) OS='darwin';
-           MACHINE_TYPE='x86_64';;
         *) echo "FATAL: Please try to enter digit.";
            exit ;;
     esac
@@ -123,7 +127,7 @@ pre_install() {
         INSTALL_PATH=$PROMPT_PATH
     fi
 
-    if [ $OS = "linux" ] || [ $OS = "freebsd" ] || [ $OS = "darwin" ]; then
+    if [ $OS = "linux" ]; then
         if [ $MACHINE_TYPE = "x86_32" ] || [ $MACHINE_TYPE = "x86_64" ]; then
             install
         else
@@ -134,26 +138,4 @@ pre_install() {
     fi
 }
 
-usage() {
-    echo " 2ip platform installation script"
-    echo " "
-    echo " Commands: install, usage"
-    echo "     install - download and install SSL certificates and 2ip server"
-    echo " "
-    echo " -i|install"
-    echo " -h|help"
-    echo ""
-}
-
-while [ "$1" != "" ]; do
-    case $1 in
-        install | -i )          pre_install
-                                exit
-                                ;;
-        help | -h | --help )	usage
-                                exit
-                                ;;
-        * )                     usage
-                                exit
-    esac
-done
+pre_install
