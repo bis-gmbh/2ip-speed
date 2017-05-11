@@ -4,8 +4,11 @@ export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
 INSTALL_PATH=/usr/local/bin
+PORT=8001
+
 MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
+USE_SYSTEMD=`grep -m1 -c systemd /proc/1/comm`
 
 get_certificates() {
     while [ -z "$DOMAIN" ]; do
@@ -42,14 +45,14 @@ get_certificates() {
 post_install() {
     case $(uname) in
     Linux)
-        if [ -d "/etc/systemd/" ]; then
+        if [ $USE_SYSTEMD -eq 1 ]; then
             SYSTEMD_CONFIG="[Unit]
 Description=2ip speed
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN
+ExecStart=$INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -71,12 +74,14 @@ WantedBy=multi-user.target
                 systemctl status 2ip-speed.service
             fi
         else
-            echo "For run please command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN".
+            echo "---------------------------------------------------------------------------------------------------"
+            echo " 2.1. For run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT"
+            echo "---------------------------------------------------------------------------------------------------"
         fi
 
-        echo "-------------------------------------------"
-        echo " 3. Go to isp control panel for add: "
-        echo "-------------------------------------------"
+        echo "----------------------------------------------"
+        echo " 3. Go to isp control panel for add platform: "
+        echo "----------------------------------------------"
         echo " wss://$DOMAIN:8001/ws "
         echo " "
 
@@ -87,9 +92,9 @@ WantedBy=multi-user.target
 }
 
 get_bin() {
-    echo "-------------------------------------------"
+    echo "----------------------------------------------"
     echo " 2. 2ip server binary downloading "
-    echo "-------------------------------------------"
+    echo "----------------------------------------------"
 
     curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/latest/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
@@ -135,6 +140,11 @@ pre_install() {
     read -r -p "Binary installation path [default: $INSTALL_PATH]: " PROMPT_PATH;
     if [ ! -z $PROMPT_PATH ]; then
         INSTALL_PATH=$PROMPT_PATH
+    fi
+
+    read -r -p "2ip speed server port [default: 8001]: " PORT_NEW;
+    if [ ! -z $PORT_NEW ]; then
+        PORT=$PORT_NEW
     fi
 
     if [ $OS = "linux" ]; then
