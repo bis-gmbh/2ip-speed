@@ -28,10 +28,15 @@ get_certificates() {
     CMD="$INSTALL_PATH/certbot-auto renew --renew-hook \"systemctl restart 2ip-speed\" > /dev/null 2>&1"
     JOB="0 12 * * * $CMD"
 
-    ( crontab -l | grep -v -F "$CMD" ; echo "$JOB" ) | crontab -
+    if [ -d "/etc/letsencrypt/live/" ]; then
+        ( crontab -l | grep -v -F "$CMD" ; echo "$JOB" ) | crontab -
 
-    chmod -R 755 /etc/letsencrypt/live/
-    chmod -R 755 /etc/letsencrypt/archive/
+        chmod -R 755 /etc/letsencrypt/live/
+        chmod -R 755 /etc/letsencrypt/archive/
+    else
+        echo "Let's Encrypt installation failed"
+        exit 1
+    fi
 }
 
 post_install() {
@@ -66,7 +71,7 @@ WantedBy=multi-user.target
                 systemctl status 2ip-speed.service
             fi
         else
-            echo "For run please run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN".
+            echo "For run please command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN".
         fi
 
         echo "-------------------------------------------"
@@ -95,13 +100,8 @@ get_bin() {
 }
 
 install() {
-    if [ "$(id -u)" != "0" ]; then
-       echo "This script must be run as root" 1>&2
-       exit 1
-    else
-        get_certificates
-        get_bin
-    fi
+    get_certificates
+    get_bin
 }
 
 select_os() {
@@ -122,6 +122,16 @@ select_os() {
 }
 
 pre_install() {
+    if [ "$(id -u)" != "0" ]; then
+       echo "This script must be run as root" 1>&2
+       exit 1
+    fi
+
+    if [ "$(netstat -an | grep 443 | grep LISTEN | wc -l)" -gt "0" ]; then
+       echo "Let's Encrypt verification port 443 not available" 1>&2
+       exit 1
+    fi
+
     read -r -p "Binary installation path [default: $INSTALL_PATH]: " PROMPT_PATH;
     if [ ! -z $PROMPT_PATH ]; then
         INSTALL_PATH=$PROMPT_PATH
