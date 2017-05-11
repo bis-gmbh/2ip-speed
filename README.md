@@ -21,8 +21,8 @@ chmod +x 2ip-speed-server.sh
 
 1) Clone repositories
 
-```git clone https://github.com/bis-gmbh/2ip-speed-server.git```  
-```cd 2ip-speed-server && git submodule update --init```
+```git clone https://github.com/bis-gmbh/2ip-speed.git```  
+```cd 2ip-speed && git submodule update --init```
 
 2) Change playbooks/hosts variables:
     - ansible_ssh_host
