@@ -9,6 +9,8 @@ apt-get update
 apt-get install systemd
 ```
 
+Intsallation:
+
 ```
 curl -O "https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/2ip-speed-server.sh"
 chmod +x 2ip-speed-server.sh
