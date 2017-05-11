@@ -2,7 +2,7 @@
 
 ### Manual
 
-Linux dependencies:
+Linux dependencies (optional):
 
 ```
 apt-get update
