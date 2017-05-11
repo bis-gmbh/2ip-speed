@@ -82,7 +82,7 @@ WantedBy=multi-user.target
         echo "----------------------------------------------"
         echo " 3. Go to isp control panel for add platform: "
         echo "----------------------------------------------"
-        echo " wss://$DOMAIN:8001/ws "
+        echo " wss://$DOMAIN:$PORT/ws "
         echo " "
 
         return;
