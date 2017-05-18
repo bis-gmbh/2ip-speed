@@ -2,13 +2,6 @@
 
 ### Manual
 
-Linux dependencies (optional):
-
-```
-apt-get update
-apt-get install systemd
-```
-
 Install:
 
 ```
@@ -17,7 +10,14 @@ chmod +x 2ip-speed-server.sh
 ./2ip-speed-server.sh
 ```
 
-### Ansible (better for multiple hosts)
+Linux dependencies (optional):
+
+```
+apt-get update
+apt-get install systemd
+```
+
+### Ansible (linux only)
 
 1) Clone repositories
 
@@ -30,12 +30,4 @@ chmod +x 2ip-speed-server.sh
 
 3) Make letsencrypt certificates and crontab updates (skip if exist):
 
-```ansible-playbook -i playbooks/hosts playbooks/1-get-letsencrypt.yml```
-
-4) Make /etc/2ip and link /etc/letcencrypt/live/host certificates
-
-```ansible-playbook -i playbooks/hosts playbooks/2-link-letsencrypt.yml```
-
-5) Install binaries in /usr/bin/ and run systemd service:
-
-```ansible-playbook -i playbooks/hosts playbooks/3-install.yml```
+```ansible-playbook -i playbooks/hosts playbooks/main.yml```

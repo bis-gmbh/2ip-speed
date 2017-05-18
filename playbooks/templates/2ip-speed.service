@@ -1,13 +1,12 @@
 [Unit]
-Description=2ip speed platform
+Description=2ip speed
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/speedtest
-ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/bin/speedtest --certdir=/etc/letsencrypt/live/{{ node_host }}
+ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
-Group=nogroup
 Restart=always
 RestartSec=3
 

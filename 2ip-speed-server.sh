@@ -16,7 +16,7 @@ get_certificates() {
     done ;
 
     echo "-------------------------------------------"
-    echo " 1. Letsencrypt certificate installation "
+    echo " 1. Letsencrypt certificate installation   "
     echo "-------------------------------------------"
 
     curl -o $INSTALL_PATH/certbot-auto "https://dl.eff.org/certbot-auto"
