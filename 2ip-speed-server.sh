@@ -74,9 +74,9 @@ WantedBy=multi-user.target
                 systemctl status 2ip-speed.service
             fi
         else
-            echo "---------------------------------------------------------------------------------------------------"
-            echo " 2.1. For run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT"
-            echo "---------------------------------------------------------------------------------------------------"
+            echo "------------------------------------------------------------------------------------------------"
+            echo " 2.1. Run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT "
+            echo "------------------------------------------------------------------------------------------------"
         fi
 
         echo "----------------------------------------------"
@@ -92,9 +92,9 @@ WantedBy=multi-user.target
 }
 
 get_bin() {
-    echo "----------------------------------------------"
+    echo "----------------------------------"
     echo " 2. 2ip server binary downloading "
-    echo "----------------------------------------------"
+    echo "----------------------------------"
 
     curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/latest/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
@@ -113,6 +113,9 @@ select_os() {
     echo "Please select server operation system [default: linux x86_64]:"
     echo "1) Linux x86_64"
     echo "2) Linux x86_32"
+    echo "3) FreeBSD x86_64"
+    echo "4) FreeBSD x86_32"
+    echo "5) Darwin (macOS) x86_64)"
 
     read -r -p "Select platform [1-5]: " NUMBER;
     case $NUMBER in
@@ -120,6 +123,12 @@ select_os() {
            MACHINE_TYPE='x86_64';;
         2) OS='linux';
            MACHINE_TYPE='x86_32';;
+        3) OS='freebsd';
+           MACHINE_TYPE='x86_64';;
+        4) OS='freebsd';
+           MACHINE_TYPE='x86_32';;
+        5) OS='darwin';
+           MACHINE_TYPE='x86_64';;
         *) echo "FATAL: Please try to enter digit.";
            exit ;;
     esac
