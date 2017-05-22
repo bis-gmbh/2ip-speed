@@ -52,7 +52,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT
+ExecStart=$INSTALL_PATH/speedtest --log=false --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -97,7 +97,7 @@ get_bin() {
     echo " 2. 2ip server binary downloading "
     echo "----------------------------------"
 
-    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/latest/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
+    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v1.0/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
     mkdir -p "$INSTALL_PATH"
     mv speedtest "$INSTALL_PATH"

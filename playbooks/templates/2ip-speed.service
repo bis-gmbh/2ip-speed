@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/speedtest --certdir=/etc/letsencrypt/live/{{ node_host }}
+ExecStart=/usr/bin/speedtest --log=false --certdir=/etc/letsencrypt/live/{{ node_host }}
 ExecReload=/bin/kill -HUP $MAINPID
 User=nobody
 Restart=always

@@ -29,7 +29,7 @@
   tasks:
     - name: Install binaries
       unarchive:
-        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/latest/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
+        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v1.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
         dest: "/usr/bin/"
         copy: no
 
