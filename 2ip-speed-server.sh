@@ -9,10 +9,11 @@ PORT=8001
 MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
 USE_SYSTEMD=`grep -m1 -c systemd /proc/1/comm`
+CURRENT_HOSTNAME=`hostname -f`
 
 get_certificates() {
     while [ -z "$DOMAIN" ]; do
-        read -r -p "Enter domain name for speed platform [example.test]: " DOMAIN;
+        read -r -p "Enter domain name for speed platform: " -i "$CURRENT_HOSTNAME" DOMAIN;
     done ;
 
     echo "-------------------------------------------"
