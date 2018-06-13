@@ -4,7 +4,7 @@
   user: root
   roles:
     - role: ansible-letsencrypt
-      letsencrypt_email: admin@{{ node_host }}
+      letsencrypt_email: dev@2ip.ru
       letsencrypt_authenticator: standalone
       letsencrypt_cert_domains:
        - '{{ node_host }}'
@@ -46,3 +46,9 @@
   handlers:
     - name: reload systemctl
       command: systemctl daemon-reload
+
+- name: Update certificates
+  hosts: servers
+  tasks:
+    - name: Reload 2ip-speed
+      command: /usr/local/share/letsencrypt/env/bin/letsencrypt renew --renew-hook "systemctl restart 2ip-speed"
