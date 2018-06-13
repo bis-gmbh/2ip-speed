@@ -28,7 +28,7 @@ get_certificates() {
     echo " 1.1. Crontab autorenew "
     echo "-------------------------------------------"
 
-    CMD="$INSTALL_PATH/certbot-auto renew --renew-hook \"systemctl restart 2ip-speed\" > /dev/null 2>&1"
+    CMD="$INSTALL_PATH/certbot-auto renew --renew-hook \"systemctl restart 2ip-speed\" > /dev/null 2>/dev/null"
     JOB="0 12 * * * $CMD"
 
     if [ -d "/etc/letsencrypt/live/" ]; then
