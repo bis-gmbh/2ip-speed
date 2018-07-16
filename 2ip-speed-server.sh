@@ -5,6 +5,7 @@ export LC_CTYPE="en_US.UTF-8"
 
 INSTALL_PATH=/usr/local/bin
 PORT=8001
+CURRENT_HOSTNAME=`hostname -f`
 
 MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
@@ -20,7 +21,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --log=false --domain=$DOMAIN --port=$PORT
+ExecStart=$INSTALL_PATH/speedtest --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -44,14 +45,14 @@ WantedBy=multi-user.target
             fi
         else
             echo "------------------------------------------------------------------------------------------------"
-            echo " 2.1. Run command: sudo $INSTALL_PATH/speedtest --domain=$DOMAIN --port=$PORT "
+            echo " 2.1. Run command: sudo $INSTALL_PATH/speedtest --domain=$CURRENT_HOSTNAME --port=$PORT "
             echo "------------------------------------------------------------------------------------------------"
         fi
 
         echo "----------------------------------------------"
         echo " 3. Go to isp control panel for add platform: "
         echo "----------------------------------------------"
-        echo " wss://$DOMAIN:$PORT/ws "
+        echo " wss://$CURRENT_HOSTNAME:$PORT/ws "
         echo " "
 
         return;
@@ -74,7 +75,6 @@ get_bin() {
 }
 
 install() {
-    get_certificates
     get_bin
 }
 
@@ -110,7 +110,7 @@ pre_install() {
        exit 1
     fi
 
-    if [ "$(netstat -an | grep 80 | grep LISTEN | wc -l)" -gt "0" ]; then
+    if [ "$(netstat -an | grep " 80 " | grep LISTEN | wc -l)" -gt "0" ]; then
        echo "Let's Encrypt verification port 80 not available" 1>&2
        exit 1
     fi
@@ -118,6 +118,11 @@ pre_install() {
     read -r -p "Binary installation path [default: $INSTALL_PATH]: " PROMPT_PATH;
     if [ ! -z $PROMPT_PATH ]; then
         INSTALL_PATH=$PROMPT_PATH
+    fi
+
+    read -r -p "Domain [default: $CURRENT_HOSTNAME]: " NEW_HOST;
+    if [ ! -z $NEW_HOST ]; then
+        CURRENT_HOSTNAME=$NEW_HOST
     fi
 
     read -r -p "2ip speed server port [default: 8001]: " PORT_NEW;
