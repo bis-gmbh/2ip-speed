@@ -110,8 +110,8 @@ pre_install() {
        exit 1
     fi
 
-    if [ "$(netstat -an | grep 443 | grep LISTEN | wc -l)" -gt "0" ]; then
-       echo "Let's Encrypt verification port 443 not available" 1>&2
+    if [ "$(netstat -an | grep 80 | grep LISTEN | wc -l)" -gt "0" ]; then
+       echo "Let's Encrypt verification port 80 not available" 1>&2
        exit 1
     fi
 
