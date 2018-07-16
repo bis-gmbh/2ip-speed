@@ -74,6 +74,7 @@ get_bin() {
 }
 
 install() {
+    get_certificates
     get_bin
 }
 
