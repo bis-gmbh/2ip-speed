@@ -44,9 +44,9 @@ WantedBy=multi-user.target
                 systemctl status 2ip-speed.service
             fi
         else
-            echo "------------------------------------------------------------------------------------------------"
-            echo " 2.1. Run command: sudo $INSTALL_PATH/speedtest --domain=$CURRENT_HOSTNAME --port=$PORT "
-            echo "------------------------------------------------------------------------------------------------"
+            echo "----------------------------------------------------------------------------------------------------"
+            echo " 2.1. Run command: sudo $INSTALL_PATH/speedtest --domain=$CURRENT_HOSTNAME --port=$PORT --log=false "
+            echo "----------------------------------------------------------------------------------------------------"
         fi
 
         echo "----------------------------------------------"
