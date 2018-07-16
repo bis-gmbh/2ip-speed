@@ -1,35 +1,11 @@
 ---
-- name: Get certificate and install autorenew cron
-  hosts: servers
-  user: root
-  roles:
-    - role: ansible-letsencrypt
-      letsencrypt_email: dev@2ip.ru
-      letsencrypt_authenticator: standalone
-      letsencrypt_cert_domains:
-       - '{{ node_host }}'
-      letsencrypt_renewal_command_args: '--renew-hook "systemctl restart 2ip-speed"'
-
-- name: Let's Encrypt permissions
-  hosts: servers
-  tasks:
-    - name: chmod for /etc/letsencrypt/archive/
-      file:
-        path: /etc/letsencrypt/archive/
-        mode: 0755
-
-    - name: chmod for /etc/letsencrypt/live/
-      file:
-        path: /etc/letsencrypt/live/
-        mode: 0755
-
 - name: Install packages
   hosts: servers
   user: root
   tasks:
     - name: Install binaries
       unarchive:
-        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v1.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
+        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v2.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
         dest: "/usr/bin/"
         copy: no
 
@@ -46,9 +22,3 @@
   handlers:
     - name: reload systemctl
       command: systemctl daemon-reload
-
-- name: Update certificates
-  hosts: servers
-  tasks:
-    - name: Reload 2ip-speed
-      command: /usr/local/share/letsencrypt/env/bin/letsencrypt renew --renew-hook "systemctl restart 2ip-speed"

@@ -10,38 +10,6 @@ MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
 USE_SYSTEMD=`grep -m1 -c systemd /proc/1/comm`
 
-get_certificates() {
-    while [ -z "$DOMAIN" ]; do
-        read -r -p "Enter domain name for speed platform [example.test]: " DOMAIN;
-    done ;
-
-    echo "-------------------------------------------"
-    echo " 1. Letsencrypt certificate installation   "
-    echo "-------------------------------------------"
-
-    curl -o $INSTALL_PATH/certbot-auto "https://dl.eff.org/certbot-auto"
-    chmod a+x $INSTALL_PATH/certbot-auto
-
-    $INSTALL_PATH/certbot-auto certonly --non-interactive --standalone --email dev@2ip.ru --agree-tos -d $DOMAIN
-
-    echo "-------------------------------------------"
-    echo " 1.1. Crontab autorenew "
-    echo "-------------------------------------------"
-
-    CMD="$INSTALL_PATH/certbot-auto renew --renew-hook \"systemctl restart 2ip-speed\" > /dev/null 2>&1"
-    JOB="0 12 * * * $CMD"
-
-    if [ -d "/etc/letsencrypt/live/" ]; then
-        ( crontab -l | grep -v -F "$CMD" ; echo "$JOB" ) | crontab -
-
-        chmod -R 755 /etc/letsencrypt/live/
-        chmod -R 755 /etc/letsencrypt/archive/
-    else
-        echo "Let's Encrypt installation failed"
-        exit 1
-    fi
-}
-
 post_install() {
     case $(uname) in
     Linux)
@@ -52,7 +20,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --log=false --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT
+ExecStart=$INSTALL_PATH/speedtest --log=false --domain=$DOMAIN --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -76,7 +44,7 @@ WantedBy=multi-user.target
             fi
         else
             echo "------------------------------------------------------------------------------------------------"
-            echo " 2.1. Run command: $INSTALL_PATH/speedtest --certdir=/etc/letsencrypt/live/$DOMAIN --port=$PORT "
+            echo " 2.1. Run command: sudo $INSTALL_PATH/speedtest --domain=$DOMAIN --port=$PORT "
             echo "------------------------------------------------------------------------------------------------"
         fi
 
@@ -97,7 +65,7 @@ get_bin() {
     echo " 2. 2ip server binary downloading "
     echo "----------------------------------"
 
-    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v1.0/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
+    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v2.0/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
     mkdir -p "$INSTALL_PATH"
     mv speedtest "$INSTALL_PATH"
@@ -106,7 +74,6 @@ get_bin() {
 }
 
 install() {
-    get_certificates
     get_bin
 }
 
