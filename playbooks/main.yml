@@ -9,6 +9,11 @@
         dest: "/usr/bin/"
         copy: no
 
+    - name: Install socket template
+      template:
+        src: templates/2ip-speed.socket
+        dest: /etc/systemd/system/2ip-speed.socket
+
     - name: Install service template
       template:
         src: templates/2ip-speed.service

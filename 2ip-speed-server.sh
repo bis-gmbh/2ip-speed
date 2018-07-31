@@ -16,12 +16,13 @@ post_install() {
     Linux)
         if [ $USE_SYSTEMD -eq 1 ]; then
             SYSTEMD_CONFIG="[Unit]
+Requires=2ip-speed.socket
 Description=2ip speed
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
+ExecStart=$INSTALL_PATH/speedtest --systemd=true --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -31,6 +32,13 @@ LimitNOFILE=8192
 [Install]
 WantedBy=multi-user.target
 "
+            SOCKET_CONFIG="[Unit]
+Description=2ip socket
+
+[Socket]
+ListenStream=80
+NoDelay=true
+"
             INSTALL_SYSTEMD="N"
             read -r -p "Install systemd service? [y/N] " INSTALL_SYSTEMD;
 
@@ -38,6 +46,10 @@ WantedBy=multi-user.target
                 [ -w /etc/systemd/system/ ] && \
                     echo "$SYSTEMD_CONFIG" > "/etc/systemd/system/2ip-speed.service" || \
                     sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
+
+                [ -w /etc/systemd/system/ ] && \
+                    echo "$SOCKET_CONFIG" > "/etc/systemd/system/2ip-speed.socket" || \
+                    sh -c "echo '$SOCKET_CONFIG' > /etc/systemd/system/2ip-speed.socket"
 
                 systemctl daemon-reload
                 systemctl start 2ip-speed.service
