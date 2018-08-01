@@ -22,7 +22,7 @@ Requires=2ip-speed.socket
 
 [Service]
 NonBlocking=true
-ExecStart=/usr/local/bin/speedtest --systemd=true --log=false --domain=vulture.fluder.co --port=8001
+ExecStart=/usr/local/bin/speedtest --systemd=true --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
 ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=8192
 
