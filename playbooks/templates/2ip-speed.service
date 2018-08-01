@@ -1,15 +1,12 @@
 [Unit]
+Description=2ip-speed
+After=network.target 2ip-speed.socket
 Requires=2ip-speed.socket
-Description=2ip speed
-After=network.target
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/speedtest --log=false --domain={{ node_host }}
+NonBlocking=true
+ExecStart=/usr/local/bin/speedtest --systemd=true --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
 ExecReload=/bin/kill -HUP $MAINPID
-User=nobody
-Restart=always
-RestartSec=3
 LimitNOFILE=8192
 
 [Install]

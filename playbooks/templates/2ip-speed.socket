@@ -1,6 +1,10 @@
 [Unit]
 Description=2ip socket
+PartOf=2ip-speed.service
 
 [Socket]
 ListenStream=80
 NoDelay=true
+
+[Install]
+WantedBy=sockets.target
