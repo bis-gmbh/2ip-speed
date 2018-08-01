@@ -16,17 +16,14 @@ post_install() {
     Linux)
         if [ $USE_SYSTEMD -eq 1 ]; then
             SYSTEMD_CONFIG="[Unit]
+Description=2ip-speed
+After=network.target 2ip-speed.socket
 Requires=2ip-speed.socket
-Description=2ip speed
-After=network.target
 
 [Service]
-Type=simple
-ExecStart=$INSTALL_PATH/speedtest --systemd=true --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
-ExecReload=/bin/kill -HUP \$MAINPID
-User=nobody
-Restart=always
-RestartSec=3
+NonBlocking=true
+ExecStart=/usr/local/bin/speedtest --systemd=true --log=false --domain=vulture.fluder.co --port=8001
+ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=8192
 
 [Install]
@@ -34,10 +31,14 @@ WantedBy=multi-user.target
 "
             SOCKET_CONFIG="[Unit]
 Description=2ip socket
+PartOf=2ip-speed.service
 
 [Socket]
 ListenStream=80
 NoDelay=true
+
+[Install]
+WantedBy=sockets.target
 "
             INSTALL_SYSTEMD="N"
             read -r -p "Install systemd service? [y/N] " INSTALL_SYSTEMD;
