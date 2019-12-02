@@ -10,7 +10,7 @@ MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
 
 post_install() {
-          SYSTEMD_CONFIG="[Unit]
+    SYSTEMD_CONFIG="[Unit]
 Description=2ip speed
 After=network.target
 
@@ -26,22 +26,17 @@ LimitNOFILE=8192
 [Install]
 WantedBy=multi-user.target
 "
-        [ -w /etc/systemd/system/ ] && \
-            echo "$SYSTEMD_CONFIG" > "/etc/systemd/system/2ip-speed.service" || \
-            sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
+    [ -w /etc/systemd/system/ ] && \
+        echo "$SYSTEMD_CONFIG" > "/etc/systemd/system/2ip-speed.service" || \
+        sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
 
-        systemctl daemon-reload
-        systemctl start 2ip-speed.service
-        systemctl status 2ip-speed.service
+    systemctl daemon-reload
+    systemctl start 2ip-speed.service
+    systemctl status 2ip-speed.service
 
-        echo "----------------------------------"
-        echo " Fin "
-        echo "----------------------------------"
-
-        return;
-        ;;
-    *)
-    esac
+    echo "----------------------------------"
+    echo " Fin "
+    echo "----------------------------------"
 }
 
 get_bin() {
