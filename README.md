@@ -2,32 +2,36 @@
 
 ### Manual
 
-Install:
-
-```
-curl -O "https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/2ip-speed-server.sh"
-chmod +x 2ip-speed-server.sh
-./2ip-speed-server.sh
-```
-
-Linux dependencies (optional):
+Install with systemd:
 
 ```
 apt-get update
 apt-get install systemd
 ```
 
-### Ansible (linux only)
+```
+https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/systemd-install.sh  
+chmod +x systemd-install.sh  
+sudo ./systemd-install.sh  
+```
+
+Or install in rc.d:
+
+```
+curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3/2ip.speed.linux.x86_64.tar.gz" | tar zx
+./speedtest --email=notification@example.com --port=8002
+```
+
+### Ansible (Linux only)
 
 1) Clone repositories
 
 ```git clone https://github.com/bis-gmbh/2ip-speed.git```  
-```cd 2ip-speed && git submodule update --init```
 
 2) Change playbooks/hosts variables:
     - ansible_ssh_host
     - node_host
 
-3) Make letsencrypt certificates and crontab updates (skip if exist):
+3) Install binaries and systemd:
 
 ```ansible-playbook -i playbooks/hosts playbooks/main.yml```

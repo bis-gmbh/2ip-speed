@@ -1,4 +1,4 @@
 [servers]
 
-Example-Platform ansible_ssh_host=1.2.3.4 ansible_ssh_user=root node_host=2ip.example
+MAIN ansible_ssh_host=sp.2ip.ru ansible_ssh_user=root
 
