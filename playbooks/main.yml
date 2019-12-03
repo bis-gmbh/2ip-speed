@@ -5,14 +5,9 @@
   tasks:
     - name: Install binaries
       unarchive:
-        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v2.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
+        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
         dest: "/usr/bin/"
         copy: no
-
-    - name: Install socket template
-      template:
-        src: templates/2ip-speed.socket
-        dest: /etc/systemd/system/2ip-speed.socket
 
     - name: Install service template
       template:

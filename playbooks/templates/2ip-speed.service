@@ -1,11 +1,10 @@
 [Unit]
 Description=2ip-speed
-After=network.target 2ip-speed.socket
-Requires=2ip-speed.socket
+After=network.target
 
 [Service]
 NonBlocking=true
-ExecStart=/usr/local/bin/speedtest --systemd=true --log=false --domain=$CURRENT_HOSTNAME --port=$PORT
+ExecStart=/usr/local/bin/speedtest --email=dev@2ip.ru
 ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=8192
 
