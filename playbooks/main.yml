@@ -5,7 +5,7 @@
   tasks:
     - name: Install binaries
       unarchive:
-        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.0/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
+        src: "https://github.com/bis-gmbh/2ip-speed/releases/download/v3/2ip.speed.linux.{{ansible_architecture}}.tar.gz"
         dest: "/usr/bin/"
         copy: no
 
@@ -15,6 +15,9 @@
         dest: /etc/systemd/system/2ip-speed.service
       notify:
         - reload systemctl
+
+    - name: Stop platform
+      service: name=2ip-speed.service state=stopped enabled=no
 
     - name: Start platform
       service: name=2ip-speed.service state=started enabled=yes

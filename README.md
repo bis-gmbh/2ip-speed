@@ -30,7 +30,6 @@ curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3/2ip.speed.li
 
 2) Change playbooks/hosts variables:
     - ansible_ssh_host
-    - node_host
 
 3) Install binaries and systemd:
 
