@@ -44,7 +44,7 @@ get_bin() {
     echo " 2ip server binary downloading "
     echo "----------------------------------"
 
-    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.0/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
+    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
     mkdir -p "$INSTALL_PATH"
     mv speedtest "$INSTALL_PATH"

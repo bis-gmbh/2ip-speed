@@ -10,7 +10,7 @@ apt-get install systemd
 ```
 
 ```
-https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/systemd-install.sh  
+curl -O https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/systemd-install.sh  
 chmod +x systemd-install.sh  
 sudo ./systemd-install.sh  
 ```
