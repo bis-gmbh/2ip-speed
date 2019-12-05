@@ -16,7 +16,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --port=$PORT --email=$NOTIFICATION_EMAIL
+ExecStart=$INSTALL_PATH/speedtest --port=$PORT $NOTIFICATION_EMAIL
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 Restart=always
@@ -81,7 +81,7 @@ pre_install() {
 
     read -r -p "Please, enter email for notifications [optional: example@example.com]: " EMAIL;
     if [ ! -z $EMAIL ]; then
-        NOTIFICATION_EMAIL=$EMAIL
+        NOTIFICATION_EMAIL="--email=$EMAIL"
     fi
 
     read -r -p "Binary installation path [default: $INSTALL_PATH]: " PROMPT_PATH;
