@@ -44,7 +44,7 @@ get_bin() {
     echo " 2ip server binary downloading "
     echo "----------------------------------"
 
-    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
+    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.1/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
     mkdir -p "$INSTALL_PATH"
     mv speedtest "$INSTALL_PATH"
@@ -60,6 +60,7 @@ select_os() {
     echo "Please select server operation system [default: linux x86_64]:"
     echo "1) Linux x86_64"
     echo "2) Linux x86_32"
+    echo "3) Linux arm_64"
 
     read -r -p "Select platform [1-5]: " NUMBER;
     case $NUMBER in
@@ -67,6 +68,8 @@ select_os() {
            MACHINE_TYPE='x86_64';;
         2) OS='linux';
            MACHINE_TYPE='x86_32';;
+        3) OS='linux';
+           MACHINE_TYPE='arm_64';;
         *) echo "FATAL: Please try to enter digit.";
            exit ;;
     esac
@@ -95,7 +98,7 @@ pre_install() {
     fi
 
     if [ $OS = "linux" ]; then
-        if [ $MACHINE_TYPE = "x86_32" ] || [ $MACHINE_TYPE = "x86_64" ]; then
+        if [ $MACHINE_TYPE = "x86_32" ] || [ $MACHINE_TYPE = "x86_64" ] || [ $MACHINE_TYPE = "arm_64" ]; then
             install
         else
             select_os
