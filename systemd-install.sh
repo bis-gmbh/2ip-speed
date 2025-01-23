@@ -31,6 +31,7 @@ WantedBy=multi-user.target
         sh -c "echo '$SYSTEMD_CONFIG' > /etc/systemd/system/2ip-speed.service"
 
     systemctl daemon-reload
+    systemctl enable 2ip-speed.service
     systemctl start 2ip-speed.service
     systemctl status 2ip-speed.service
 
