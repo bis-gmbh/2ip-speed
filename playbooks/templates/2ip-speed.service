@@ -9,6 +9,7 @@ ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=8192
 Restart=always
 RestartSec=5
+AmbientCapabilities=CAP_NET_RAW
 
 [Install]
 WantedBy=multi-user.target
