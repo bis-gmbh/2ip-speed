@@ -19,6 +19,7 @@ Type=simple
 ExecStart=$INSTALL_PATH/speedtest --port=$PORT $NOTIFICATION_EMAIL
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
+AmbientCapabilities=CAP_NET_RAW
 Restart=always
 RestartSec=3
 LimitNOFILE=8192
@@ -45,7 +46,7 @@ get_bin() {
     echo " 2ip server binary downloading "
     echo "----------------------------------"
 
-    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.1/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
+    curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v4/2ip.speed.$OS.$MACHINE_TYPE.tar.gz" | tar zx
 
     mkdir -p "$INSTALL_PATH"
     mv speedtest "$INSTALL_PATH"
