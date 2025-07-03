@@ -18,7 +18,7 @@ sudo ./systemd-install.sh
 Or install in rc.d:
 
 ```
-curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v3.1/2ip.speed.linux.x86_64.tar.gz" | tar zx
+curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v4/2ip.speed.linux.x86_64.tar.gz" | tar zx
 ./speedtest --email=notification@example.com --port=8002
 ```
 
