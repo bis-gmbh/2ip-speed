@@ -9,6 +9,8 @@ PORT=8002
 MACHINE_TYPE=`uname -m`
 OS=`uname | tr '[A-Z]' '[a-z]'`
 
+USER_ID=$1
+
 post_install() {
     SYSTEMD_CONFIG="[Unit]
 Description=2ip speed
@@ -16,7 +18,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_PATH/speedtest --port=$PORT $NOTIFICATION_EMAIL
+ExecStart=$INSTALL_PATH/speedtest --id=$USER_ID --port=$PORT
 ExecReload=/bin/kill -HUP \$MAINPID
 User=nobody
 AmbientCapabilities=CAP_NET_RAW
@@ -79,14 +81,17 @@ select_os() {
 }
 
 pre_install() {
+    if [ -z "$USER_ID" ]; then
+        read -r -p "Please, enter ID: " USER_ID;
+        if [ -z $USER_ID ]; then
+            echo "ID not found"
+            exit 1
+        fi
+    fi
+
     if [ "$(id -u)" != "0" ]; then
        echo "This script must be run as root" 1>&2
        exit 1
-    fi
-
-    read -r -p "Please, enter email for notifications [optional: example@example.com]: " EMAIL;
-    if [ ! -z $EMAIL ]; then
-        NOTIFICATION_EMAIL="--email=$EMAIL"
     fi
 
     read -r -p "Binary installation path [default: $INSTALL_PATH]: " PROMPT_PATH;

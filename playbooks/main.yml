@@ -4,7 +4,11 @@
   user: root
   tasks:
     - name: Stop platform
-      service: name=2ip-speed.service state=stopped enabled=no
+      service:
+        name: 2ip-speed.service
+        state: stopped
+        enabled: no
+      failed_when: false
       
     - name: Install binaries
       unarchive:
