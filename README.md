@@ -1,8 +1,8 @@
 ## 2ip platform installation
 
-### Manual
+At first get uniq ID: [https://2ip.io/isp-platforms/](https://2ip.io/isp-platforms/)
 
-Install with systemd:
+### Systemd
 
 ```
 apt-get update
@@ -12,25 +12,26 @@ apt-get install systemd
 ```
 curl -O https://raw.githubusercontent.com/bis-gmbh/2ip-speed/master/systemd-install.sh  
 chmod +x systemd-install.sh  
-sudo ./systemd-install.sh  
+sudo ./systemd-install.sh UNIQ_ID
 ```
 
-Or install in rc.d:
+### Manual
 
 ```
 curl -L "https://github.com/bis-gmbh/2ip-speed/releases/download/v4/2ip.speed.linux.x86_64.tar.gz" | tar zx
-./speedtest --email=notification@example.com --port=8002
+./speedtest --id=UNIQ_ID
 ```
 
-### Ansible (Linux only)
+### Ansible
 
-1) Clone repositories
+1. Clone repositories
 
-```git clone https://github.com/bis-gmbh/2ip-speed.git```  
+```git clone https://github.com/bis-gmbh/2ip-speed.git```
 
-2) Change playbooks/hosts variables:
-    - ansible_ssh_host
+2. Change playbooks/hosts variables:
+   - ansible_ssh_host
+   - uniq_id – Take [here](https://2ip.io/isp-platforms/)
 
-3) Install binaries and systemd:
+3. Install binaries and systemd:
 
 ```ansible-playbook -i playbooks/hosts playbooks/main.yml```
