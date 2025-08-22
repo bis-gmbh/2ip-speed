@@ -36,10 +36,15 @@ WantedBy=multi-user.target
     systemctl daemon-reload
     systemctl enable 2ip-speed.service
     systemctl start 2ip-speed.service
-    systemctl status 2ip-speed.service
+
+    if ! systemctl is-active --quiet 2ip-speed.service; then
+        echo "ERROR: 2ip-speed.service failed to start"
+        systemctl status 2ip-speed.service --no-pager
+        exit 1
+    fi
 
     echo "----------------------------------"
-    echo " Fin "
+    echo " 2ip-speed.service is running "
     echo "----------------------------------"
 }
 
